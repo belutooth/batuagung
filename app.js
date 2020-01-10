@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon')
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var pt = require('./routes/pt');
 var app = express();
@@ -13,13 +14,13 @@ mongoose.connect('mongodb://localhost/batuagung', { useUnifiedTopology:true, use
   .then(() =>  console.log('connection succesful'))
   .catch((err) => console.error(err));
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({'extended':true}));
 app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/pts', express.static(path.join(__dirname, 'dist')));
 app.use('/pt', pt);
-app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 // catch 404 and forward to error handler
